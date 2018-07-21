@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import "./App.css";
 import Map from "./Map";
 
+/*Default values for Map*/
 class App extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +15,8 @@ class App extends Component {
       isMarkerShown: false
     };
   }
-
+  
+/*Geolocation Function to fetch the current location*/
   showCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -37,6 +39,7 @@ class App extends Component {
     this.showCurrentLocation();
   }
 
+/*The state of the current location and the marker are passed to the Map component*/
   render() {
     return (
       <div className="App">
