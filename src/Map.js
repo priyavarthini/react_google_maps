@@ -1,7 +1,6 @@
 /*global google*/
 import React from "react";
 import logo from "./homeicon.png";
-
 import {
   compose,
   withProps,
@@ -17,6 +16,8 @@ import {
   InfoWindow
 } from "react-google-maps";
 const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
+
+/*Container of the map*/
 const Map = compose(
   withProps({
     googleMapURL:
@@ -41,7 +42,7 @@ const Map = compose(
   withHandlers(() => {
     const refs = {
       map: undefined
-      //isOpen: false,
+      
     };
 
     return {
@@ -49,14 +50,14 @@ const Map = compose(
         refs.map = ref;
       },
 
+      /* nearBySearch function of Google Places API */
       fetchPlaces: ({ updatePlaces }) => {
         let places;
         const bounds = refs.map.getBounds();
         const service = new google.maps.places.PlacesService(
           refs.map.context.__SECRET_MAP_DO_NOT_USE_OR_YOU_WILL_BE_FIRED
         );
-        console.log("HelloSir");
-        console.log(refs.map);
+        
         const request = {
           location: {
             lat: refs.map.props.defaultPosition.lat,
@@ -68,7 +69,7 @@ const Map = compose(
         service.nearbySearch(request, (results, status) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < 20; i++) {
-              console.log(results);
+              //console.log(results);
               updatePlaces(results);
             }
           }
@@ -82,7 +83,6 @@ const Map = compose(
       //ref={props.onMapMounted}
       onTilesLoaded={props.fetchPlaces}
       ref={props.onMapMounted}
-      //onBoundsChanged={props.fetchPlaces}
       defaultZoom={15}
       defaultCenter={{
         lat: props.currentLocation.lat,
@@ -106,8 +106,7 @@ const Map = compose(
         props.places.map((place, i) => (
           <Marker
             key={i}
-            //options={{ icon: 'https://i.imgur.com/9G5JOp8.png' }}
-            position={{
+              position={{
               lat: place.geometry.location.lat(),
               lng: place.geometry.location.lng()
             }}
@@ -116,10 +115,14 @@ const Map = compose(
             onClick={props.onToggleOpen}
           >
             {props.isOpen && (
+             /*infowindow to display the restaurants name and address*/
               <InfoWindow onCloseClick={props.onToggleOpen}>
                 <div>
-                  {place.name}
-                  {place.vicinity}
+                  <h3>
+                    {place.name}
+                    {"\n"}
+                  </h3>
+                  <p>{place.vicinity}</p>
                 </div>
               </InfoWindow>
             )}
